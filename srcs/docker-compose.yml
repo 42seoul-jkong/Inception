@@ -1,0 +1,86 @@
+services:
+
+  db:
+    container_name: mariadb
+    build:
+      context: requirements/mariadb
+      args:
+        - MYSQL_ROOT_PASSWORD
+        - MYSQL_DATABASE
+        - MYSQL_USER
+        - MYSQL_PASSWORD
+    expose:
+      - "3306"
+    restart: always
+    env_file: .env
+    networks:
+      mysql:
+        aliases:
+          - $DATABASE_HOST
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "/healthcheck.sh" ]
+      interval: 1s
+      timeout: 1s
+      retries: 10
+      start_period: 1s
+
+  blog:
+    container_name: wordpress
+    build: requirements/wordpress
+    expose:
+      - "9000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+    env_file: .env
+    networks:
+      mysql: {}
+      php_cgi:
+        aliases:
+          - $PHP_FCGI_HOST
+    volumes:
+      - wordpress_data:/var/www
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "$PHP_FCGI_HOST", "9000" ]
+      interval: 1s
+      timeout: 1s
+      retries: 10
+      start_period: 1s
+
+  web:
+    container_name: nginx
+    build: requirements/nginx
+    ports:
+      - "4242:80"
+      - "443:443"
+    depends_on:
+      blog:
+        condition: service_healthy
+    restart: always
+    networks:
+      php_cgi: {}
+    volumes:
+      - wordpress_data:/var/www
+
+networks:
+  mysql: {}
+  php_cgi: {}
+
+volumes:
+
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: $VOLUME_BASE_DIR/db
+      o: bind
+
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: $VOLUME_BASE_DIR/wp
+      o: bind
