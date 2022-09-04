@@ -2,10 +2,16 @@
 
 FROM alpine:latest
 
+ARG DOMAIN_NAME
+ARG CERTS_SUBJECT
+ARG NGINX_FCGI_HOST
+
 RUN apk add --no-cache \
 			nginx \
 			openssl
 
-RUN openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certificate.pem -subj "/"
+COPY selfsign.sh /
+COPY configure.sh /
+RUN chmod +x /selfsign.sh /configure.sh && /selfsign.sh && /configure.sh
 
 ENTRYPOINT nginx -g "daemon off;"

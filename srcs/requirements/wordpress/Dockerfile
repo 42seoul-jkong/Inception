@@ -4,7 +4,6 @@ FROM alpine:latest
 
 RUN apk add --no-cache \
 			php \
-			php-phar \
 			php-fpm \
 			php-json \
 			php-mysqli \
@@ -13,15 +12,21 @@ RUN apk add --no-cache \
 			php-exif \
 			php-fileinfo \
 			# php-hash \
-			# php-imagick \
 			php-mbstring \
 			php-openssl \
 			# php-pcre \
 			php-xml \
 			php-zip \
-			# php-memcached \
 			php-opcache \
-			# php-redis \
+			php-gd \
+			php-iconv \
+			php-intl \
+			php8-pecl-imagick \
+			php8-redis \
+# php-phar For wp CLI
+			php-phar \
+# php-tokenizer For wp config set
+			php-tokenizer \
 			mariadb-client
 
 RUN sed -i "s|.*listen\s*=.*|listen = 9000|g" /etc/php8/php-fpm.d/www.conf

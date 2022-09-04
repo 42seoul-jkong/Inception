@@ -26,6 +26,18 @@ services:
       retries: 10
       start_period: 1s
 
+  # ftp:
+  #   container_name: vsftpd
+
+  # adminer:
+  #   container_name: adminer
+
+  # cache:
+  #   container_name: redis
+
+  # mail:
+  #   container_name: postfix
+
   blog:
     container_name: wordpress
     build: requirements/wordpress
@@ -38,36 +50,42 @@ services:
     env_file: .env
     networks:
       mysql: {}
-      php_cgi:
+      www:
         aliases:
           - $PHP_FCGI_HOST
     volumes:
       - wordpress_data:/var/www
     healthcheck:
       test: [ "CMD", "nc", "-z", "$PHP_FCGI_HOST", "9000" ]
-      interval: 1s
+      interval: 5s
       timeout: 1s
-      retries: 10
+      retries: 6
       start_period: 1s
 
   web:
     container_name: nginx
-    build: requirements/nginx
+    build:
+      context: requirements/nginx
+      args:
+        - DOMAIN_NAME
+        - CERTS_SUBJECT
+        - NGINX_FCGI_HOST
     ports:
-      - "4242:80"
       - "443:443"
     depends_on:
       blog:
         condition: service_healthy
     restart: always
     networks:
-      php_cgi: {}
+      www:
+        aliases:
+          - $DOMAIN_NAME
     volumes:
       - wordpress_data:/var/www
 
 networks:
   mysql: {}
-  php_cgi: {}
+  www: {}
 
 volumes:
 
