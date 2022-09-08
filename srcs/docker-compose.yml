@@ -1,7 +1,7 @@
 services:
 
-  db:
-    container_name: mariadb
+  mariadb:
+    container_name: db
     build:
       context: requirements/mariadb
       args:
@@ -26,25 +26,47 @@ services:
       retries: 10
       start_period: 1s
 
-  # ftp:
-  #   container_name: vsftpd
+  vsftpd:
+    container_name: ftp
+    build:
+      context: requirements/vsftpd
+      args:
+        - CERTS_SUBJECT
+        - VSFTPD_PASV_PORT_MIN
+        - VSFTPD_PASV_PORT_MAX
+    expose:
+      - "20"
+      - "21"
+      - "$VSFTPD_PASV_PORT_MIN-$VSFTPD_PASV_PORT_MAX"
+    ports:
+      - "20:20"
+      - "21:21"
+      - "$VSFTPD_PASV_PORT_MIN-$VSFTPD_PASV_PORT_MAX:$VSFTPD_PASV_PORT_MIN-$VSFTPD_PASV_PORT_MAX"
+    restart: always
+    env_file: .env
+    networks:
+      www:
+        aliases:
+          - $FTP_HOST
+    volumes:
+      - wordpress_data:/var/www
 
   # adminer:
   #   container_name: adminer
 
-  # cache:
-  #   container_name: redis
+  # redis:
+  #   container_name: cache
 
-  # mail:
-  #   container_name: postfix
+  # postfix:
+  #   container_name: mail
 
-  blog:
-    container_name: wordpress
+  wordpress:
+    container_name: blog
     build: requirements/wordpress
     expose:
       - "9000"
     depends_on:
-      db:
+      mariadb:
         condition: service_healthy
     restart: always
     env_file: .env
@@ -62,8 +84,8 @@ services:
       retries: 6
       start_period: 1s
 
-  web:
-    container_name: nginx
+  nginx:
+    container_name: http
     build:
       context: requirements/nginx
       args:
@@ -73,7 +95,7 @@ services:
     ports:
       - "443:443"
     depends_on:
-      blog:
+      wordpress:
         condition: service_healthy
     restart: always
     networks:

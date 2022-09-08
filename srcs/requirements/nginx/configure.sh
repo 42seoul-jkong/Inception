@@ -29,6 +29,8 @@ cat > /var/nginx/errors/404.html << 'EOF'
 </body></html>
 EOF
 
+sed -i "s|ssl_protocols.*TLSv1.1.*;|ssl_protocols TLSv1.2 TLSv1.3;|g" /etc/nginx/nginx.conf
+
 cat > /etc/nginx/http.d/default.conf << EOF
 server {
 	ssl_certificate sslcert/certificate.pem;
