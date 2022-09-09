@@ -7,8 +7,8 @@ ARG VSFTPD_PASV_PORT_MIN
 ARG VSFTPD_PASV_PORT_MAX
 
 RUN apk add --no-cache \
-			vsftpd \
-			openssl
+	vsftpd \
+	openssl
 
 COPY selfsign.sh /
 COPY configure.sh /

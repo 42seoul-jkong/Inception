@@ -7,8 +7,8 @@ ARG CERTS_SUBJECT
 ARG NGINX_FCGI_HOST
 
 RUN apk add --no-cache \
-			nginx \
-			openssl
+	nginx \
+	openssl
 
 COPY selfsign.sh /
 COPY configure.sh /

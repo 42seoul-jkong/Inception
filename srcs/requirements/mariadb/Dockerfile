@@ -8,8 +8,8 @@ ARG MYSQL_USER
 ARG MYSQL_PASSWORD
 
 RUN apk add --no-cache \
-			mariadb \
-			mariadb-client
+	mariadb \
+	mariadb-client
 
 COPY install.sh /
 COPY healthcheck.sh /

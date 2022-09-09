@@ -54,8 +54,16 @@ services:
   # adminer:
   #   container_name: adminer
 
-  # redis:
-  #   container_name: cache
+  redis:
+    container_name: cache
+    build: requirements/redis
+    expose:
+      - "6379"
+    restart: always
+    networks:
+      redis:
+        aliases:
+          - $CACHE_HOST
 
   # postfix:
   #   container_name: mail
@@ -68,10 +76,13 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
+      redis:
+        condition: service_started
     restart: always
     env_file: .env
     networks:
       mysql: {}
+      redis: {}
       www:
         aliases:
           - $PHP_FCGI_HOST
@@ -107,6 +118,7 @@ services:
 
 networks:
   mysql: {}
+  redis: {}
   www: {}
 
 volumes:

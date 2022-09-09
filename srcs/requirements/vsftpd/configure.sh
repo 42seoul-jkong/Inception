@@ -3,11 +3,11 @@
 sed -i "s|.*anonymous_enable\s*=.*|anonymous_enable=NO|g" /etc/vsftpd/vsftpd.conf
 sed -i "s|.*local_enable\s*=.*|local_enable=YES|g" /etc/vsftpd/vsftpd.conf
 sed -i "s|.*write_enable\s*=.*|write_enable=YES|g" /etc/vsftpd/vsftpd.conf
-sed -i "s|.*chroot_local_user\s*=.*|chroot_local_user=YES|g" /etc/vsftpd/vsftpd.conf
+# sed -i "s|.*chroot_local_user\s*=.*|chroot_local_user=YES|g" /etc/vsftpd/vsftpd.conf
 
 cat >> /etc/vsftpd/vsftpd.conf << EOF
 seccomp_sandbox=NO
-allow_writeable_chroot=YES
+# allow_writeable_chroot=YES
 
 listen_port=21
 
