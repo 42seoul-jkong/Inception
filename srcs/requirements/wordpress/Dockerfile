@@ -35,6 +35,10 @@ RUN apk add --no-cache \
 
 RUN sed -i "s|.*listen\s*=.*|listen = 9000|g" /etc/php8/php-fpm.d/www.conf
 
+RUN mkdir -p /var/adminer/
+ADD https://www.adminer.org/latest-mysql.php /var/adminer/adminer.php
+RUN chmod 755 /var/adminer/adminer.php
+
 ADD https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar /usr/local/bin/wp
 RUN chmod 755 /usr/local/bin/wp
 

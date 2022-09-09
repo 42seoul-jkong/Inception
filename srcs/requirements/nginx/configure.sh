@@ -85,4 +85,27 @@ server {
 		deny all;
 	}
 }
+
+server {
+	ssl_certificate sslcert/certificate.pem;
+	ssl_certificate_key sslcert/key.pem;
+
+	listen 8443 default_server ssl;
+	listen [::]:8443 default_server ssl;
+
+	server_name $DOMAIN_NAME;
+
+	access_log logs/access_adminer.log main;
+
+	location / {
+		fastcgi_param HTTP_PROXY "";
+
+		fastcgi_pass $NGINX_FCGI_HOST:9000;
+
+		include fastcgi_params;
+		fastcgi_intercept_errors on;
+
+		fastcgi_param SCRIPT_FILENAME /var/adminer/adminer.php;
+	}
+}
 EOF

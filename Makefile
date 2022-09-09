@@ -6,7 +6,7 @@
 #    By: jkong <jkong@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/04 05:08:57 by jkong             #+#    #+#              #
-#    Updated: 2022/09/04 05:16:53 by jkong            ###   ########.fr        #
+#    Updated: 2022/09/10 03:58:22 by jkong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ install:
 	sh get-docker.sh
 
 build:
-	mkdir -p $(DATA_PATH)db $(DATA_PATH)wp
+	mkdir -p $(DATA_PATH)db $(DATA_PATH)wp $(DATA_PATH)git
 	$(DOCKER_COMPOSE) build
 
 up:

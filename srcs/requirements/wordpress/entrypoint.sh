@@ -52,8 +52,8 @@ then
 	sudo_wp config set "WP_REDIS_HOST" "$CACHE_HOST" $WORDPRESS_PATH_OPTION
 	sudo_wp config set "WP_REDIS_PORT" 6379 --raw $WORDPRESS_PATH_OPTION
 	# sudo_wp config set "WP_REDIS_PASSWORD" "secret" $WORDPRESS_PATH_OPTION
-	sudo_wp config set "WP_REDIS_TIMEOUT" 5 --raw $WORDPRESS_PATH_OPTION
-	sudo_wp config set "WP_REDIS_READ_TIMEOUT" 5 --raw $WORDPRESS_PATH_OPTION
+	sudo_wp config set "WP_REDIS_TIMEOUT" 1 --raw $WORDPRESS_PATH_OPTION
+	sudo_wp config set "WP_REDIS_READ_TIMEOUT" 1 --raw $WORDPRESS_PATH_OPTION
 	sudo_wp config set "WP_REDIS_DATABASE" 0 --raw $WORDPRESS_PATH_OPTION
 	sudo_wp redis enable $WORDPRESS_PATH_OPTION
 fi
