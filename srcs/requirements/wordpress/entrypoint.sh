@@ -5,7 +5,7 @@ sudo_wp() {
 }
 
 WORDPRESS_PATH_OPTION=--path=/var/www
-CACHE_PLUGIN_NAME=w3-total-cache
+CACHE_PLUGIN_NAME=redis-cache
 
 adduser -D -h /var/www -u 2000 somebody
 
@@ -47,6 +47,15 @@ then
 	# Activate plugin
 	sudo_wp plugin activate $CACHE_PLUGIN_NAME $WORDPRESS_PATH_OPTION
 	sudo_wp plugin auto-updates enable $CACHE_PLUGIN_NAME $WORDPRESS_PATH_OPTION
+
+	# Plugin specific configuration
+	sudo_wp config set "WP_REDIS_HOST" "$CACHE_HOST" $WORDPRESS_PATH_OPTION
+	sudo_wp config set "WP_REDIS_PORT" 6379 --raw $WORDPRESS_PATH_OPTION
+	# sudo_wp config set "WP_REDIS_PASSWORD" "secret" $WORDPRESS_PATH_OPTION
+	sudo_wp config set "WP_REDIS_TIMEOUT" 5 --raw $WORDPRESS_PATH_OPTION
+	sudo_wp config set "WP_REDIS_READ_TIMEOUT" 5 --raw $WORDPRESS_PATH_OPTION
+	sudo_wp config set "WP_REDIS_DATABASE" 0 --raw $WORDPRESS_PATH_OPTION
+	sudo_wp redis enable $WORDPRESS_PATH_OPTION
 fi
 
 exec php-fpm8 --nodaemonize

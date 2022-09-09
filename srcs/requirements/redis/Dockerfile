@@ -4,4 +4,4 @@ FROM alpine:latest
 
 RUN apk add --no-cache redis
 
-ENTRYPOINT redis-server
+ENTRYPOINT redis-server --protected-mode no

@@ -29,6 +29,8 @@ RUN apk add --no-cache \
 	php-tokenizer \
 	# php-ftp For Background update
 	php-ftp \
+	# php-ctype For Redis plug-in
+	php-ctype \
 	mariadb-client
 
 RUN sed -i "s|.*listen\s*=.*|listen = 9000|g" /etc/php8/php-fpm.d/www.conf
