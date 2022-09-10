@@ -19,12 +19,6 @@ services:
           - $DATABASE_HOST
     volumes:
       - db_data:/var/lib/mysql
-    healthcheck:
-      test: [ "CMD", "/healthcheck.sh" ]
-      interval: 1s
-      timeout: 1s
-      retries: 10
-      start_period: 1s
 
   vsftpd:
     container_name: ftp
@@ -91,12 +85,6 @@ services:
           - $PHP_FCGI_HOST
     volumes:
       - wordpress_data:/var/www
-    healthcheck:
-      test: [ "CMD", "nc", "-z", "$PHP_FCGI_HOST", "9000" ]
-      interval: 5s
-      timeout: 1s
-      retries: 6
-      start_period: 1s
 
   nginx:
     container_name: http

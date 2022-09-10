@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM alpine:latest
+FROM alpine:3.15.6
 
 ARG CERTS_SUBJECT
 ARG VSFTPD_PASV_PORT_MIN
