@@ -48,5 +48,5 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT /entrypoint.sh
 
-HEALTHCHECK --interval=5s --timeout=1s --start-period=1s --retries=6 \
+HEALTHCHECK --interval=1s --timeout=1s --start-period=1s --retries=120 \
 	CMD [ "nc", "-z", "localhost", "9000" ]
